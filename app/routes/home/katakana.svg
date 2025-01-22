@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <defs>
+    <symbol id="katakana-project-1" viewBox="0 0 751 136">
+      <text x="10" y="100" font-family="var(--fontStack)" font-size="100" fill="currentColor" font-weight="700">
+        UI/UX Design
+      </text>
+    </symbol>
+    <symbol id="katakana-project-2" viewBox="0 0 751 136">
+      <text x="10" y="100" font-family="var(--fontStack)" font-size="100" fill="currentColor" font-weight="700">
+        APP
+      </text>
+    </symbol>
+    <symbol id="katakana-project-3" viewBox="0 0 751 136">
+      <text x="10" y="100" font-family="var(--fontStack)" font-size="100" fill="currentColor" font-weight="700">
+        dApp Design
+      </text>
+    </symbol>
+    <symbol id="katakana-project-4" viewBox="0 0 751 136">
+      <text x="10" y="100" font-family="var(--fontStack)" font-size="100" fill="currentColor" font-weight="700">
+        Illustrations
+      </text>
+    </symbol>
+    <symbol id="katakana-profile" viewBox="0 0 136 766">
+      <text x="-350" y="400" font-family="var(--fontStack)" font-size="100" fill="currentColor" font-weight="700" transform="rotate(-90)">
+        PROFILE
+      </text>
+    </symbol>
+  </defs>
+</svg>
