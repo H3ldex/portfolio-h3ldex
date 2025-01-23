@@ -142,7 +142,7 @@ export function Articles() {
   const postsHeader = (
     <header className={styles.header}>
       <Heading className={styles.heading} level={5} as="h1">
-        <DecoderText text="Latest articles" />
+        <DecoderText text="Latest article" />
       </Heading>
       <Barcode className={styles.barcode} />
     </header>
