@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+
 @layer components {
   .text {
     &::after {
@@ -8,12 +10,15 @@
 
   .glyph {
     opacity: 0.8;
-    font-weight: var(--fontWeightRegular);
-    font-family: var(--japaneseFontStack);
+    font-weight: var(--fontWeightMedium);
+    font-family: 'Source Code Pro', monospace;
     line-height: 0;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
   }
 
   .value {
     opacity: 1;
+    font-family: var(--fontStack);
   }
 }
