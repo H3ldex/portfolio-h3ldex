@@ -1,7 +1,7 @@
 import config from '~/config.json';
 
 const { name, url, twitter } = config;
-const defaultOgImage = `${url}/d3vPage.png`;
+const defaultOgImage = `${url}/d3vPAGE.png`;
 
 export function baseMeta({
   title,
