@@ -15,14 +15,14 @@ import { cssProps, msToNum, numToMs } from '~/utils/style';
 import { baseMeta } from '~/utils/meta';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/cloudflare';
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import nodemailer from 'nodemailer';
 import styles from './contact.module.css';
 
 export const meta = () => {
   return baseMeta({
     title: 'Contact',
     description:
-      'Send me a message if you’re interested in discussing a project or if you just want to say hi',
+      'Send me a message if you\'re interested in discussing a project or if you just want to say hi',
   });
 };
 
@@ -31,11 +31,14 @@ const MAX_MESSAGE_LENGTH = 4096;
 const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
 
 export async function action({ context, request }) {
-  const ses = new SESClient({
-    region: 'us-east-1',
-    credentials: {
-      accessKeyId: context.cloudflare.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: context.cloudflare.env.AWS_SECRET_ACCESS_KEY,
+  // Configure the transporter with Porkbun SMTP settings
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.porkbun.com', // Replace with Porkbun's SMTP server
+    port: 587, // Typically 587 for TLS
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: 'inquiries@h3ldex.dev', // Your Porkbun email username
+      pass: 'Helder23002001!', // Your Porkbun email password
     },
   });
 
@@ -69,26 +72,14 @@ export async function action({ context, request }) {
     return json({ errors });
   }
 
-  // Send email via Amazon SES
-  await ses.send(
-    new SendEmailCommand({
-      Destination: {
-        ToAddresses: [context.cloudflare.env.EMAIL],
-      },
-      Message: {
-        Body: {
-          Text: {
-            Data: `From: ${email}\n\n${message}`,
-          },
-        },
-        Subject: {
-          Data: `Portfolio message from ${email}`,
-        },
-      },
-      Source: `Portfolio <${context.cloudflare.env.FROM_EMAIL}>`,
-      ReplyToAddresses: [email],
-    })
-  );
+  // Send email via Porkbun SMTP
+  await transporter.sendMail({
+    from: `Portfolio <inquiries@h3ldex.dev>`,
+    to: context.cloudflare.env.EMAIL,
+    subject: `Portfolio message from ${email}`,
+    text: `From: ${email}\n\n${message}`,
+    replyTo: email,
+  });
 
   return json({ success: true });
 }
@@ -215,7 +206,7 @@ export const Contact = () => {
               data-status={status}
               style={getDelay(tokens.base.durationXS)}
             >
-              I’ll get back to you within a couple days, sit tight
+              I'll get back to you within a couple days, sit tight
             </Text>
             <Button
               secondary
