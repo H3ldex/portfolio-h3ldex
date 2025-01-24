@@ -1,19 +1,19 @@
 {
-  "short_name": "Hamish Williams",
-  "name": "Design Portfolio of Hamish Williams",
+  "short_name": "H3ldex Lou",
+  "name": "Design Portfolio of H3ldex Lou",
   "icons": [
     {
-      "src": "shortcut.png",
+      "src": "iconhl64.png",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "icon-256.png",
+      "src": "icon256hl.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon512hl.png",
       "sizes": "512x512",
       "type": "image/png"
     }

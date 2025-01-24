@@ -5,7 +5,7 @@ addons.setConfig({
   theme: {
     ...themes.dark,
     brandImage: './iconhl.svg',
-    brandTitle: 'Hamish Williams Components',
-    brandUrl: 'https://hamishw.com',
+    brandTitle: 'H3ldex Lou Components',
+    brandUrl: 'https://h3ldex.dev',
   },
 });

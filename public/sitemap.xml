@@ -1,38 +1,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hamishw.com/</loc>
+    <loc>https://h3ldex.dev/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/contact/</loc>
+    <loc>https://h3ldex.dev/contact/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/articles/</loc>
+    <loc>https://h3ldex.dev/articles/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/uses/</loc>
+    <loc>https://h3ldex.dev/uses/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/projects/slice/</loc>
+    <loc>https://h3ldex.dev/projects/slice/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/projects/smart-sparrow/</loc>
+    <loc>https://h3ldex.dev/projects/smart-sparrow/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/projects/volkihar-knight/</loc>
+    <loc>https://h3ldex.dev/projects/volkihar-knight/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/articles/hello-world</loc>
+    <loc>https://h3ldex.dev/articles/A-Curious-Beginning</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://hamishw.com/articles/modern-styling-in-react</loc>
+    <loc>https://h3ldex.dev/articles/Designing-Exceptional-UIUX</loc>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
