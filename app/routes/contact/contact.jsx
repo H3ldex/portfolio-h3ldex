@@ -15,7 +15,6 @@ import { cssProps, msToNum, numToMs } from '~/utils/style';
 import { baseMeta } from '~/utils/meta';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/cloudflare';
-import nodemailer from 'nodemailer';
 import styles from './contact.module.css';
 
 export const meta = () => {
@@ -31,17 +30,6 @@ const MAX_MESSAGE_LENGTH = 4096;
 const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
 
 export async function action({ context, request }) {
-  // Configure the transporter with Porkbun SMTP settings
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.porkbun.com', // Replace with Porkbun's SMTP server
-    port: 587, // Typically 587 for TLS
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: 'inquiries@h3ldex.dev', // Your Porkbun email username
-      pass: 'Helder23002001!', // Your Porkbun email password
-    },
-  });
-
   const formData = await request.formData();
   const isBot = String(formData.get('name'));
   const email = String(formData.get('email'));
@@ -72,16 +60,48 @@ export async function action({ context, request }) {
     return json({ errors });
   }
 
-  // Send email via Porkbun SMTP
-  await transporter.sendMail({
-    from: `Portfolio <inquiries@h3ldex.dev>`,
-    to: context.cloudflare.env.EMAIL,
-    subject: `Portfolio message from ${email}`,
-    text: `From: ${email}\n\n${message}`,
-    replyTo: email,
-  });
+  try {
+    const response = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: context.cloudflare.env.EMAIL }],
+          },
+        ],
+        from: {
+          email: context.cloudflare.env.FROM_EMAIL,
+          name: 'Portfolio',
+        },
+        subject: `Portfolio message from ${email}`,
+        content: [
+          {
+            type: 'text/plain',
+            value: `From: ${email}\n\n${message}`,
+          },
+        ],
+        reply_to: {
+          email: email,
+        },
+      }),
+    });
 
-  return json({ success: true });
+    if (!response.ok) {
+      throw new Error('Failed to send email');
+    }
+
+    return json({ success: true });
+  } catch (error) {
+    console.error('Failed to send email:', error);
+    return json({ 
+      errors: { 
+        message: 'Failed to send message. Please try again later.' 
+      } 
+    });
+  }
 }
 
 export const Contact = () => {

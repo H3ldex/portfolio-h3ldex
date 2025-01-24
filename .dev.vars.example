@@ -2,15 +2,15 @@
 
 ENVIRONMENT=development
 
+# SMTP Configuration for Porkbun
+SMTP_USER=your_email@domain.com
+SMTP_PASS=your_smtp_password
+
 # The email address to send emails to
-EMAIL=you@website.com
+EMAIL=receiving_email@domain.com
 
-# The email address to send emails from (this needs to be set up in the AWS SES dashboard)
-FROM_EMAIL=portfolio-site@website.com
-
-# Credentials from your AWS account
-AWS_ACCESS_KEY_ID=PASTE_YOUR_ACCESS_KEY
-AWS_SECRET_ACCESS_KEY=PASTE_YOUR_SECRET_KEY
+# The email address to send emails from
+FROM_EMAIL=sending_email@domain.com
 
 # This is a random string used for the session cookie for saving the preferred theme
 SESSION_SECRET=KEEP_IT_SECRET_KEEP_IT_SAFE
