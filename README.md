@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">H3ldex Website</h1>
 
-[![Site preview](/public/d3vPAGE.png)](https://h3ldex.dev)
+[![Site preview](/public/h3image.png)](https://h3ldex.dev)
 
 ## Project Overview
 
