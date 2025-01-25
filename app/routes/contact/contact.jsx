@@ -78,7 +78,7 @@ export async function action({ context, request }) {
         ],
         from: {
           email: context.cloudflare.env.FROM_EMAIL,
-          name: 'Portfolio',
+          name: 'Portfolio Contact Form',
         },
         subject: `Portfolio message from ${email}`,
         content: [
@@ -87,9 +87,6 @@ export async function action({ context, request }) {
             value: `From: ${email}\n\n${message}`,
           },
         ],
-        reply_to: {
-          email: email,
-        },
       }),
     });
 
