@@ -30,6 +30,10 @@ const MAX_MESSAGE_LENGTH = 4096;
 const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
 
 export async function action({ context, request }) {
+  console.log('Environment check:', {
+    hasEmail: !!context.cloudflare.env.EMAIL,
+    hasFromEmail: !!context.cloudflare.env.FROM_EMAIL,
+  });
   const formData = await request.formData();
   const isBot = String(formData.get('name'));
   const email = String(formData.get('email'));
@@ -90,15 +94,17 @@ export async function action({ context, request }) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to send email');
+      const errorData = await response.text();
+      console.error('Mail service response:', errorData);
+      throw new Error(`Failed to send email: ${errorData}`);
     }
 
     return json({ success: true });
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error('Failed to send email:', error.message);
     return json({ 
       errors: { 
-        message: 'Failed to send message. Please try again later.' 
+        message: `Failed to send message: ${error.message}` 
       } 
     });
   }
