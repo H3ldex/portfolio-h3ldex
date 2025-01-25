@@ -12,126 +12,21 @@ import { Transition } from '~/components/transition';
 import { useFormInput } from '~/hooks';
 import { useRef } from 'react';
 import { cssProps, msToNum, numToMs } from '~/utils/style';
-import { baseMeta } from '~/utils/meta';
-import { Form, useActionData, useNavigation } from '@remix-run/react';
-import { json } from '@remix-run/cloudflare';
 import styles from './contact.module.css';
 
-export const meta = () => {
-  return baseMeta({
-    title: 'Contact',
-    description:
-      'Send me a message if you\'re interested in discussing a project or if you just want to say hi',
-  });
+export const action = async ({ request }) => {
+  // If you don't need an action, you can return null
+  return null;
 };
 
-const MAX_EMAIL_LENGTH = 512;
-const MAX_MESSAGE_LENGTH = 4096;
-const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
-
-export async function action({ context, request }) {
-  console.log('Environment check:', {
-    hasEmail: !!context.cloudflare.env.EMAIL,
-    hasFromEmail: !!context.cloudflare.env.FROM_EMAIL,
-  });
-  const formData = await request.formData();
-  const isBot = String(formData.get('name'));
-  const email = String(formData.get('email'));
-  const message = String(formData.get('message'));
-  const errors = {};
-
-  // Return without sending if a bot trips the honeypot
-  if (isBot) return json({ success: true });
-
-  // Handle input validation on the server
-  if (!email || !EMAIL_PATTERN.test(email)) {
-    errors.email = 'Please enter a valid email address.';
-  }
-
-  if (!message) {
-    errors.message = 'Please enter a message.';
-  }
-
-  if (email.length > MAX_EMAIL_LENGTH) {
-    errors.email = `Email address must be shorter than ${MAX_EMAIL_LENGTH} characters.`;
-  }
-
-  if (message.length > MAX_MESSAGE_LENGTH) {
-    errors.message = `Message must be shorter than ${MAX_MESSAGE_LENGTH} characters.`;
-  }
-
-  if (Object.keys(errors).length > 0) {
-    return json({ errors });
-  }
-
-  try {
-    const response = await fetch('https://api.mailchannels.net/tx/v1/send', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        personalizations: [
-          {
-            to: [{ email: 'helderscarab@gmail.com' }],
-          },
-        ],
-        from: {
-          email: 'ask@h3ldex.dev',
-          name: 'Portfolio Contact Form',
-        },
-        subject: `Portfolio message from ${email}`,
-        content: [
-          {
-            type: 'text/plain',
-            value: `From: ${email}\n\n${message}`,
-          },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Mail service error response:', {
-        status: response.status,
-        statusText: response.statusText,
-        body: errorData,
-      });
-      throw new Error(`Mail service error: ${response.status} ${response.statusText}`);
-    }
-
-    return json({ success: true });
-  } catch (error) {
-    console.error('Failed to send email:', error.message);
-    return json({ 
-      errors: { 
-        message: 'Failed to send message. Please try again later.' 
-      } 
-    }, {
-      status: 500
-    });
-  }
-}
-
 export const Contact = () => {
-  const errorRef = useRef();
-  const email = useFormInput('');
-  const message = useFormInput('');
   const initDelay = tokens.base.durationS;
-  const actionData = useActionData();
-  const { state } = useNavigation();
-  const sending = state === 'submitting';
 
   return (
     <Section className={styles.contact}>
-      <Transition unmount in={!actionData?.success} timeout={1600}>
+      <Transition unmount in timeout={1600}>
         {({ status, nodeRef }) => (
-          <Form
-            unstable_viewTransition
-            className={styles.form}
-            method="post"
-            ref={nodeRef}
-          >
+          <div className={styles.content} ref={nodeRef}>
             <Heading
               className={styles.title}
               data-status={status}
@@ -146,108 +41,52 @@ export const Contact = () => {
               data-status={status}
               style={getDelay(tokens.base.durationXS, initDelay, 0.4)}
             />
-            {/* Hidden honeypot field to identify bots */}
-            <Input
-              className={styles.botkiller}
-              label="Name"
-              name="name"
-              maxLength={MAX_EMAIL_LENGTH}
-            />
-            <Input
-              required
-              className={styles.input}
-              data-status={status}
-              style={getDelay(tokens.base.durationXS, initDelay)}
-              autoComplete="email"
-              label="Your email"
-              type="email"
-              name="email"
-              maxLength={MAX_EMAIL_LENGTH}
-              {...email}
-            />
-            <Input
-              required
-              multiline
-              className={styles.input}
-              data-status={status}
-              style={getDelay(tokens.base.durationS, initDelay)}
-              autoComplete="off"
-              label="Message"
-              name="message"
-              maxLength={MAX_MESSAGE_LENGTH}
-              {...message}
-            />
-            <Transition
-              unmount
-              in={!sending && actionData?.errors}
-              timeout={msToNum(tokens.base.durationM)}
-            >
-              {({ status: errorStatus, nodeRef }) => (
-                <div
-                  className={styles.formError}
-                  ref={nodeRef}
-                  data-status={errorStatus}
-                  style={cssProps({
-                    height: errorStatus ? errorRef.current?.offsetHeight : 0,
-                  })}
-                >
-                  <div className={styles.formErrorContent} ref={errorRef}>
-                    <div className={styles.formErrorMessage}>
-                      <Icon className={styles.formErrorIcon} icon="error" />
-                      {actionData?.errors?.email}
-                      {actionData?.errors?.message}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </Transition>
-            <Button
-              className={styles.button}
-              data-status={status}
-              data-sending={sending}
-              style={getDelay(tokens.base.durationM, initDelay)}
-              disabled={sending}
-              loading={sending}
-              loadingText="Sending..."
-              icon="send"
-              type="submit"
-            >
-              Send message
-            </Button>
-          </Form>
-        )}
-      </Transition>
-      <Transition unmount in={actionData?.success}>
-        {({ status, nodeRef }) => (
-          <div className={styles.complete} aria-live="polite" ref={nodeRef}>
-            <Heading
-              level={3}
-              as="h3"
-              className={styles.completeTitle}
-              data-status={status}
-            >
-              Message Sent
-            </Heading>
-            <Text
-              size="l"
-              as="p"
-              className={styles.completeText}
-              data-status={status}
-              style={getDelay(tokens.base.durationXS)}
-            >
-              I'll get back to you within a couple days, sit tight
-            </Text>
-            <Button
-              secondary
-              iconHoverShift
-              className={styles.completeButton}
-              data-status={status}
-              style={getDelay(tokens.base.durationM)}
-              href="/"
-              icon="chevron-right"
-            >
-              Back to homepage
-            </Button>
+            <div className={styles.socialLinks}>
+              <a 
+                href="mailto:ask@h3ldex.dev" 
+                className={styles.socialLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="email" />
+                <span className={styles.linkText}>ask@h3ldex.dev</span>
+              </a>
+              <a 
+                href="https://discord.com/users/h3ld3x" 
+                className={styles.socialLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="discord" />
+                <span className={styles.linkText}>@h3ld3x</span>
+              </a>
+              <a 
+                href="https://twitter.com/H3lD3x" 
+                className={styles.socialLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="x" />
+                <span className={styles.linkText}>@H3lD3x</span>
+              </a>
+              <a 
+                href="https://codestag.xyz/contacts" 
+                className={styles.socialLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="bluesky" />
+                <span className={styles.linkText}>CodeStag</span>
+              </a>
+            </div>
+            <div className={styles.buttonContainer}>
+              <Button 
+                href="mailto:ask@h3ldex.dev"
+                icon="send"
+              >
+                Contact Me
+              </Button>
+            </div>
           </div>
         )}
       </Transition>
@@ -260,3 +99,6 @@ function getDelay(delayMs, offset = numToMs(0), multiplier = 1) {
   const numDelay = msToNum(delayMs) * multiplier;
   return cssProps({ delay: numToMs((msToNum(offset) + numDelay).toFixed(0)) });
 }
+
+// Make Contact the default export
+export default Contact;

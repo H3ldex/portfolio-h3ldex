@@ -58,5 +58,17 @@
   "bluesky": {
     "width": 24,
     "height": 24
+  },
+  "email": {
+    "width": 24,
+    "height": 24
+  },
+  "discord": {
+    "width": 24,
+    "height": 24
+  },
+  "x": {
+    "width": 24,
+    "height": 24
   }
 }
