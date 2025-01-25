@@ -65,7 +65,7 @@ export async function action({ context, request }) {
   }
 
   try {
-    const response = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    const response = await context.cloudflare.env.MAIL_WORKER.fetch('https://api.mailchannels.net/tx/v1/send', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -73,11 +73,11 @@ export async function action({ context, request }) {
       body: JSON.stringify({
         personalizations: [
           {
-            to: [{ email: context.cloudflare.env.EMAIL }],
+            to: [{ email: 'helderscarab@gmail.com' }],
           },
         ],
         from: {
-          email: context.cloudflare.env.FROM_EMAIL,
+          email: 'ask@h3ldex.dev',
           name: 'Portfolio Contact Form',
         },
         subject: `Portfolio message from ${email}`,
