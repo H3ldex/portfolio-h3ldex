@@ -65,7 +65,7 @@ export async function action({ context, request }) {
   }
 
   try {
-    const response = await context.cloudflare.env.MAIL_WORKER.fetch('https://api.mailchannels.net/tx/v1/send', {
+    const response = await fetch('https://api.mailchannels.net/tx/v1/send', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -92,8 +92,12 @@ export async function action({ context, request }) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Mail service response:', errorData);
-      throw new Error(`Failed to send email: ${errorData}`);
+      console.error('Mail service error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorData,
+      });
+      throw new Error(`Mail service error: ${response.status} ${response.statusText}`);
     }
 
     return json({ success: true });
@@ -101,8 +105,10 @@ export async function action({ context, request }) {
     console.error('Failed to send email:', error.message);
     return json({ 
       errors: { 
-        message: `Failed to send message: ${error.message}` 
+        message: 'Failed to send message. Please try again later.' 
       } 
+    }, {
+      status: 500
     });
   }
 }
