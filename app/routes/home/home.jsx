@@ -7,9 +7,9 @@ import gamestackTexture from '~/assets/TG3.png';
 import sliceTextureLarge from '~/assets/PPN1920.png';
 import sliceTexturePlaceholder from '~/assets/PPN1920.png';
 import sliceTexture from '~/assets/PPN800.png';
-import sprTextureLarge from '~/assets/Wavelength1920.png';
-import sprTexturePlaceholder from '~/assets/WavelengthDAO.png';
-import sprTexture from '~/assets/Wavelength800w.png';
+import sprTextureLarge from '~/assets/HOG1920.png';
+import sprTexturePlaceholder from '~/assets/HOG2880.png';
+import sprTexture from '~/assets/HOG800.png';
 import laptopTextureLarge from '~/assets/onchain1920.png';
 import laptopTexturePlaceholder from '~/assets/onnchain800.png';
 import laptopTexture from '~/assets/onnchain800.png';
@@ -110,10 +110,10 @@ export const Home = () => {
         sectionRef={projectOne}
         visible={visibleSections.includes(projectOne.current)}
         index={1}
-        title="Wavelength DAO"
-        description="The most advanced AMM on Velas entirely community owned and managed."
+        title="Hand of God"
+        description="Hand of God is an AI-enhanced DeFi protocol designed for dynamic, data-driven governance and sustainable tokenomics."
         buttonText="View project"
-        buttonLink="https://wavelength.exchange/"
+        buttonLink="https://www.handofgod.app/"
         model={{
           type: 'laptop',
           alt: 'Smart Sparrow lesson builder',

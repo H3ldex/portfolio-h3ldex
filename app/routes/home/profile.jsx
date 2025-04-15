@@ -1,6 +1,6 @@
-import profileImgLarge from '~/assets/myimage960.png';
-import profileImgPlaceholder from '~/assets/myimage480.png';
-import profileImg from '~/assets/myimage480.png';
+import profileImgLarge from '~/assets/scremmo.gif';
+import profileImgPlaceholder from '~/assets/scremmo.gif';
+import profileImg from '~/assets/scremmo.gif';
 import { Button } from '~/components/button';
 import { DecoderText } from '~/components/decoder-text';
 import { Divider } from '~/components/divider';
